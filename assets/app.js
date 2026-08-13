@@ -14,6 +14,29 @@
 
   document.getElementById('userChip').textContent = '👤 ' + (session.name || session.user);
 
+  // ---------- view mode (mobile / pc) ----------
+  const VIEW_MODE_KEY = 'lp_view_mode';
+  function applyViewMode(mode) {
+    const isPc = mode === 'pc';
+    document.body.classList.toggle('pc-mode', isPc);
+    const btn = document.getElementById('viewToggle');
+    if (btn) {
+      btn.querySelector('.vt-icon').textContent = isPc ? '📱' : '💻';
+      btn.querySelector('.vt-label').textContent = isPc ? 'Móvil' : 'PC';
+      btn.title = isPc ? 'Ver en móvil' : 'Ver en PC';
+    }
+  }
+  try {
+    const savedMode = localStorage.getItem(VIEW_MODE_KEY) || 'mobile';
+    applyViewMode(savedMode);
+  } catch (_) {}
+  document.getElementById('viewToggle').addEventListener('click', () => {
+    const nowPc = !document.body.classList.contains('pc-mode');
+    const newMode = nowPc ? 'pc' : 'mobile';
+    localStorage.setItem(VIEW_MODE_KEY, newMode);
+    applyViewMode(newMode);
+  });
+
   // ---------- storage keys ----------
   const K = {
     products: 'lp_products',
