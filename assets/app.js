@@ -123,6 +123,9 @@
     $$('.view').forEach(el => el.classList.toggle('hidden', el.dataset.view !== view));
     $$('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === view));
     $$('.bn-item').forEach(el => el.classList.toggle('active', el.dataset.view === view));
+    // Ensure mobile cart sheet closes on any view change; refresh FAB
+    if (typeof closeCart === 'function') closeCart();
+    renderCart();
     const titles = {
       'venta':'Punto de Venta','productos':'Productos','merma':'Merma',
       'corte-diario':'Corte Diario','corte-mensual':'Corte Mensual','dashboard':'Dashboard'
@@ -304,7 +307,32 @@
     $('#sumTax').textContent   = fmt(t.tax);
     $('#sumTotal').textContent = fmt(t.total);
     $('#btnCharge').disabled   = t.total <= 0;
+
+    // Mobile cart FAB visibility + labels
+    const fab = $('#cartFab');
+    if (fab) {
+      $('#cfCount').textContent = t.count;
+      $('#cfTotal').textContent = fmt(t.total);
+      fab.classList.toggle('hidden', t.count === 0 || state.view !== 'venta');
+    }
   }
+
+  // ---------- mobile cart sheet ----------
+  const posCart   = $('#posCart');
+  const cartScrim = $('#cartScrim');
+  const cartFab   = $('#cartFab');
+
+  function openCart()  {
+    posCart.classList.add('open');
+    cartScrim.classList.add('show');
+  }
+  function closeCart() {
+    posCart.classList.remove('open');
+    cartScrim.classList.remove('show');
+  }
+  cartFab.addEventListener('click', openCart);
+  cartScrim.addEventListener('click', closeCart);
+  $('#closeCart').addEventListener('click', closeCart);
 
   $$('.pay-btn').forEach(btn => btn.addEventListener('click', () => {
     $$('.pay-btn').forEach(b => b.classList.remove('active'));
@@ -334,6 +362,7 @@
     $('#cashReceived').value = '';
     $('#cashChange').textContent = fmt(0);
     chargeModal.classList.remove('hidden');
+    closeCart();
     setTimeout(() => $('#cashReceived').focus(), 50);
   }
 

@@ -15,7 +15,7 @@
   <header class="topbar">
     <button class="menu-btn" id="openMenu" aria-label="Abrir menú">☰</button>
     <div class="topbar-brand">
-      <div class="mini-logo">🦐</div>
+      <img src="assets/logo.png" alt="Los Primos" class="mini-logo" />
       <div class="topbar-title">
         <strong>Los Primos</strong>
         <small id="topbarSection">Punto de Venta</small>
@@ -30,9 +30,7 @@
   <!-- Side navigation -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="brand-circle small">
-        <span class="brand-emoji">🦐</span>
-      </div>
+      <img src="assets/logo.png" alt="Los Primos" class="side-logo" />
       <div>
         <strong>Los Primos</strong>
         <small>Playa Miramar</small>
@@ -53,6 +51,16 @@
   </aside>
   <div class="scrim" id="scrim"></div>
 
+  <!-- Floating cart bar (mobile) -->
+  <button class="cart-fab hidden" id="cartFab" type="button">
+    <span class="cf-count" id="cfCount">0</span>
+    <span class="cf-label">Ver ticket</span>
+    <span class="cf-total" id="cfTotal">$0.00</span>
+  </button>
+
+  <!-- Cart sheet scrim (mobile) -->
+  <div class="cart-scrim" id="cartScrim"></div>
+
   <!-- Bottom nav (mobile) -->
   <nav class="bottom-nav">
     <button class="bn-item active" data-view="venta"><span>🧾</span><em>Venta</em></button>
@@ -68,7 +76,7 @@
     <!-- VIEW: Venta -->
     <section class="view" data-view="venta">
       <div class="pos-grid">
-        <div class="pos-products">
+        <div class="pos-products" id="posProducts">
           <div class="filter-row">
             <div class="search-box">
               <span>🔎</span>
@@ -79,10 +87,13 @@
           <div class="product-grid" id="productGrid"></div>
         </div>
 
-        <aside class="pos-cart">
+        <aside class="pos-cart" id="posCart">
           <div class="cart-header">
             <h3>Ticket</h3>
-            <span class="cart-count" id="cartCount">0 artículos</span>
+            <div class="cart-header-right">
+              <span class="cart-count" id="cartCount">0 artículos</span>
+              <button class="sheet-close" id="closeCart" aria-label="Cerrar ticket">✕</button>
+            </div>
           </div>
           <div class="cart-items" id="cartItems">
             <div class="empty-state">
@@ -344,7 +355,7 @@
     <div class="modal-card">
       <div class="ticket">
         <div class="ticket-brand">
-          <div class="brand-circle small"><span>🦐</span></div>
+          <img src="assets/logo.png" alt="Los Primos" class="ticket-logo" />
           <div>
             <strong>Mariscos Frescos Los Primos</strong>
             <small>Playa Miramar · Tampico, Tam.</small>
