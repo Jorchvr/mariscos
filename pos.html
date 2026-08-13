@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b2545" />
+  <title>Los Primos · Punto de Venta</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+  <!-- Top bar -->
+  <header class="topbar">
+    <button class="menu-btn" id="openMenu" aria-label="Abrir menú">☰</button>
+    <div class="topbar-brand">
+      <div class="mini-logo">🦐</div>
+      <div class="topbar-title">
+        <strong>Los Primos</strong>
+        <small id="topbarSection">Punto de Venta</small>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span class="user-chip" id="userChip">👤 admin</span>
+      <button class="btn-ghost" id="logoutBtn" title="Cerrar sesión">Salir</button>
+    </div>
+  </header>
+
+  <!-- Side navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-circle small">
+        <span class="brand-emoji">🦐</span>
+      </div>
+      <div>
+        <strong>Los Primos</strong>
+        <small>Playa Miramar</small>
+      </div>
+      <button class="close-btn" id="closeMenu" aria-label="Cerrar">✕</button>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-view="venta"><span class="ni">🧾</span> Venta</button>
+      <button class="nav-item" data-view="productos"><span class="ni">🐟</span> Productos</button>
+      <button class="nav-item" data-view="merma"><span class="ni">🗑️</span> Merma</button>
+      <button class="nav-item" data-view="corte-diario"><span class="ni">📅</span> Corte diario</button>
+      <button class="nav-item" data-view="corte-mensual"><span class="ni">📊</span> Corte mensual</button>
+      <button class="nav-item" data-view="dashboard"><span class="ni">📈</span> Dashboard</button>
+    </nav>
+    <div class="sidebar-foot">
+      <button class="btn-ghost block" id="resetDemo">Reiniciar demo</button>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- Bottom nav (mobile) -->
+  <nav class="bottom-nav">
+    <button class="bn-item active" data-view="venta"><span>🧾</span><em>Venta</em></button>
+    <button class="bn-item" data-view="productos"><span>🐟</span><em>Productos</em></button>
+    <button class="bn-item" data-view="merma"><span>🗑️</span><em>Merma</em></button>
+    <button class="bn-item" data-view="corte-diario"><span>📅</span><em>Corte</em></button>
+    <button class="bn-item" data-view="dashboard"><span>📈</span><em>Panel</em></button>
+  </nav>
+
+  <!-- Main content -->
+  <main class="app-main" id="appMain">
+
+    <!-- VIEW: Venta -->
+    <section class="view" data-view="venta">
+      <div class="pos-grid">
+        <div class="pos-products">
+          <div class="filter-row">
+            <div class="search-box">
+              <span>🔎</span>
+              <input id="searchProduct" type="search" placeholder="Buscar producto..." />
+            </div>
+            <div class="chips" id="categoryChips"></div>
+          </div>
+          <div class="product-grid" id="productGrid"></div>
+        </div>
+
+        <aside class="pos-cart">
+          <div class="cart-header">
+            <h3>Ticket</h3>
+            <span class="cart-count" id="cartCount">0 artículos</span>
+          </div>
+          <div class="cart-items" id="cartItems">
+            <div class="empty-state">
+              <span>🛒</span>
+              <p>Agrega productos para empezar</p>
+            </div>
+          </div>
+          <div class="cart-summary">
+            <div class="row"><span>Subtotal</span><strong id="sumSub">$0.00</strong></div>
+            <div class="row"><span>IVA (16%)</span><strong id="sumTax">$0.00</strong></div>
+            <div class="row total"><span>Total</span><strong id="sumTotal">$0.00</strong></div>
+          </div>
+          <div class="pay-methods">
+            <button class="pay-btn active" data-method="efectivo">💵 Efectivo</button>
+            <button class="pay-btn" data-method="tarjeta">💳 Tarjeta</button>
+            <button class="pay-btn" data-method="transferencia">📱 Transfer</button>
+          </div>
+          <button class="btn-primary btn-block big" id="btnCharge" disabled>Cobrar</button>
+          <button class="btn-ghost btn-block" id="btnClearCart">Vaciar ticket</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- VIEW: Productos -->
+    <section class="view hidden" data-view="productos">
+      <div class="view-head">
+        <h2>Productos</h2>
+        <p class="muted">Catálogo con costo, precio, margen y stock</p>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card"><small>Productos</small><strong id="stProd">0</strong></div>
+        <div class="stat-card"><small>Valor de inventario</small><strong id="stInv">$0</strong></div>
+        <div class="stat-card"><small>Margen promedio</small><strong id="stMarg">0%</strong></div>
+        <div class="stat-card"><small>Stock bajo</small><strong id="stLow">0</strong></div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="productsTable">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="hide-sm">Categoría</th>
+              <th>Costo</th>
+              <th>Precio</th>
+              <th class="hide-sm">Margen</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW: Merma -->
+    <section class="view hidden" data-view="merma">
+      <div class="view-head">
+        <h2>Merma</h2>
+        <p class="muted">Registra producto perdido, caducado o dañado</p>
+      </div>
+
+      <div class="two-col">
+        <form class="card" id="mermaForm">
+          <h3>Registrar merma</h3>
+          <label class="field">
+            <span class="field-label">Producto</span>
+            <div class="field-input">
+              <select id="mermaProd" required></select>
+            </div>
+          </label>
+          <label class="field">
+            <span class="field-label">Cantidad</span>
+            <div class="field-input">
+              <input id="mermaQty" type="number" min="1" value="1" required />
+            </div>
+          </label>
+          <label class="field">
+            <span class="field-label">Motivo</span>
+            <div class="field-input">
+              <select id="mermaReason">
+                <option value="Caducidad">Caducidad</option>
+                <option value="Dañado">Dañado</option>
+                <option value="Mal manejo">Mal manejo</option>
+                <option value="Cortesía">Cortesía</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </label>
+          <button class="btn-primary btn-block" type="submit">Registrar merma</button>
+        </form>
+
+        <div class="card">
+          <h3>Resumen</h3>
+          <div class="stat-cards inline">
+            <div class="stat-card"><small>Merma hoy</small><strong id="mermaToday">$0</strong></div>
+            <div class="stat-card"><small>Merma del mes</small><strong id="mermaMonth">$0</strong></div>
+          </div>
+          <div class="table-wrap tight">
+            <table class="data-table" id="mermaTable">
+              <thead>
+                <tr><th>Fecha</th><th>Producto</th><th>Cant.</th><th>Motivo</th><th>Costo</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: Corte diario -->
+    <section class="view hidden" data-view="corte-diario">
+      <div class="view-head">
+        <h2>Corte diario</h2>
+        <p class="muted">Resumen de ventas del día</p>
+      </div>
+      <div class="filter-row">
+        <label class="field inline">
+          <span class="field-label">Fecha</span>
+          <div class="field-input"><input type="date" id="cutDate" /></div>
+        </label>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card accent"><small>Total del día</small><strong id="cdTotal">$0</strong></div>
+        <div class="stat-card"><small>Tickets</small><strong id="cdTickets">0</strong></div>
+        <div class="stat-card"><small>Costo</small><strong id="cdCost">$0</strong></div>
+        <div class="stat-card"><small>Utilidad estimada</small><strong id="cdProfit">$0</strong></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>Por método de pago</h3>
+          <div id="cdByMethod" class="method-list"></div>
+        </div>
+        <div class="card">
+          <h3>Productos vendidos</h3>
+          <div class="table-wrap tight">
+            <table class="data-table" id="cdProducts">
+              <thead><tr><th>Producto</th><th>Cant.</th><th>Ventas</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Tickets del día</h3>
+        <div class="table-wrap tight">
+          <table class="data-table" id="cdTicketList">
+            <thead><tr><th>Hora</th><th>Ticket</th><th class="hide-sm">Método</th><th>Artículos</th><th>Total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: Corte mensual -->
+    <section class="view hidden" data-view="corte-mensual">
+      <div class="view-head">
+        <h2>Corte mensual</h2>
+        <p class="muted">Consolidado del mes en curso</p>
+      </div>
+      <div class="filter-row">
+        <label class="field inline">
+          <span class="field-label">Mes</span>
+          <div class="field-input"><input type="month" id="cutMonth" /></div>
+        </label>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card accent"><small>Ventas del mes</small><strong id="cmTotal">$0</strong></div>
+        <div class="stat-card"><small>Tickets</small><strong id="cmTickets">0</strong></div>
+        <div class="stat-card"><small>Ticket promedio</small><strong id="cmAvg">$0</strong></div>
+        <div class="stat-card"><small>Utilidad estimada</small><strong id="cmProfit">$0</strong></div>
+        <div class="stat-card warn"><small>Merma del mes</small><strong id="cmMerma">$0</strong></div>
+        <div class="stat-card"><small>Mejor día</small><strong id="cmBest">—</strong></div>
+      </div>
+
+      <div class="card">
+        <h3>Ventas por día</h3>
+        <div class="bar-chart" id="cmChart"></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>Top productos</h3>
+          <div class="table-wrap tight">
+            <table class="data-table" id="cmTop">
+              <thead><tr><th>Producto</th><th>Cant.</th><th>Ventas</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Métodos de pago</h3>
+          <div id="cmByMethod" class="method-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: Dashboard -->
+    <section class="view hidden" data-view="dashboard">
+      <div class="view-head">
+        <h2>Dashboard</h2>
+        <p class="muted">Vista general del negocio</p>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card accent"><small>Ventas hoy</small><strong id="dbToday">$0</strong></div>
+        <div class="stat-card"><small>Ventas del mes</small><strong id="dbMonth">$0</strong></div>
+        <div class="stat-card"><small>Utilidad del mes</small><strong id="dbProfit">$0</strong></div>
+        <div class="stat-card warn"><small>Merma del mes</small><strong id="dbMerma">$0</strong></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <h3>Últimos 7 días</h3>
+          <div class="bar-chart small" id="dbChart"></div>
+        </div>
+        <div class="card">
+          <h3>Productos más vendidos</h3>
+          <ul class="rank-list" id="dbTop"></ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Charge modal -->
+  <div class="modal hidden" id="chargeModal">
+    <div class="modal-card">
+      <h3>Cobrar</h3>
+      <div class="pay-total">
+        <span>Total a cobrar</span>
+        <strong id="modalTotal">$0.00</strong>
+      </div>
+      <label class="field">
+        <span class="field-label">Recibido</span>
+        <div class="field-input">
+          <input id="cashReceived" type="number" min="0" step="0.01" />
+        </div>
+      </label>
+      <div class="quick-cash">
+        <button data-cash="100">$100</button>
+        <button data-cash="200">$200</button>
+        <button data-cash="500">$500</button>
+        <button data-cash="1000">$1,000</button>
+        <button data-cash="exact">Exacto</button>
+      </div>
+      <div class="pay-change">
+        <span>Cambio</span>
+        <strong id="cashChange">$0.00</strong>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="cancelCharge">Cancelar</button>
+        <button class="btn-primary" id="confirmCharge">Confirmar cobro</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticket modal -->
+  <div class="modal hidden" id="ticketModal">
+    <div class="modal-card">
+      <div class="ticket">
+        <div class="ticket-brand">
+          <div class="brand-circle small"><span>🦐</span></div>
+          <div>
+            <strong>Mariscos Frescos Los Primos</strong>
+            <small>Playa Miramar · Tampico, Tam.</small>
+            <small>Tel. 833 265 0387</small>
+          </div>
+        </div>
+        <div class="ticket-meta">
+          <div><span>Ticket</span><strong id="tkNum">#0001</strong></div>
+          <div><span>Fecha</span><strong id="tkDate">—</strong></div>
+          <div><span>Pago</span><strong id="tkPay">—</strong></div>
+        </div>
+        <div class="ticket-lines" id="tkLines"></div>
+        <div class="ticket-totals">
+          <div><span>Subtotal</span><strong id="tkSub">$0.00</strong></div>
+          <div><span>IVA</span><strong id="tkTax">$0.00</strong></div>
+          <div class="grand"><span>Total</span><strong id="tkTotal">$0.00</strong></div>
+        </div>
+        <p class="ticket-thanks">¡Gracias por su compra! 🌴🦐</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="closeTicket">Cerrar</button>
+        <button class="btn-primary" id="newSale">Nueva venta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-host" id="toastHost"></div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

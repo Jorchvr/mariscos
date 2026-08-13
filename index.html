@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b2545" />
+  <title>Los Primos · Iniciar sesión</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+  <div class="wave-bg" aria-hidden="true"></div>
+  <main class="login-shell">
+    <section class="login-card">
+      <div class="brand-badge">
+        <div class="brand-circle">
+          <span class="brand-emoji">🦐</span>
+          <span class="brand-palms">🌴</span>
+          <span class="brand-sun"></span>
+        </div>
+        <h1 class="brand-title">
+          <span class="brand-top">Mariscos Frescos</span>
+          <span class="brand-name">Los Primos</span>
+          <span class="brand-sub">· AGUACHILES ·</span>
+        </h1>
+        <p class="brand-location">Playa Miramar · Tampico, Tamaulipas</p>
+      </div>
+
+      <form id="loginForm" class="login-form" autocomplete="off" novalidate>
+        <h2 class="form-title">Iniciar sesión</h2>
+        <p class="form-hint">Accede al Punto de Venta</p>
+
+        <label class="field">
+          <span class="field-label">Usuario</span>
+          <div class="field-input">
+            <span class="field-icon">👤</span>
+            <input id="username" type="text" placeholder="admin" autocomplete="off" required />
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Contraseña</span>
+          <div class="field-input">
+            <span class="field-icon">🔒</span>
+            <input id="password" type="password" placeholder="••••" autocomplete="off" required />
+            <button type="button" class="toggle-eye" id="togglePw" aria-label="Mostrar contraseña">👁</button>
+          </div>
+        </label>
+
+        <div class="row-between">
+          <label class="checkbox">
+            <input type="checkbox" id="remember" checked />
+            <span>Recordarme</span>
+          </label>
+          <a href="#" class="link-muted" onclick="event.preventDefault();alert('Demo: contacta al administrador.')">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block">
+          <span>Entrar al POS</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <div id="loginError" class="alert-error hidden">Usuario o contraseña incorrectos.</div>
+
+        <div class="demo-creds">
+          <strong>Credenciales de demo</strong>
+          <div><code>admin</code> / <code>1234</code></div>
+          <div><code>cajero</code> / <code>1234</code></div>
+        </div>
+      </form>
+    </section>
+    <footer class="login-foot">
+      Demo estático · Sin base de datos · <span>© Los Primos</span>
+    </footer>
+  </main>
+  <script src="assets/login.js"></script>
+</body>
+</html>
