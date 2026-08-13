@@ -76,7 +76,7 @@ input, select, textarea { font-family: inherit; color: inherit; font-size: 16px;
    PHONE FRAME on desktop
    ============================================================ */
 @media (min-width: 640px) {
-  body {
+  body:not(.pc-mode) {
     background:
       radial-gradient(1000px 500px at 50% -10%, var(--sea-soft), transparent 60%),
       radial-gradient(800px 400px at 50% 110%, var(--sand), transparent 60%),
@@ -84,8 +84,10 @@ input, select, textarea { font-family: inherit; color: inherit; font-size: 16px;
     min-height: 100vh;
     padding: 32px 0;
   }
-  .login-body,
-  .app-body {
+  body:not(.pc-mode) .login-body,
+  body:not(.pc-mode).login-body,
+  body:not(.pc-mode) .app-body,
+  body:not(.pc-mode).app-body {
     max-width: var(--app-w);
     margin: 0 auto;
     background: var(--bg);
@@ -97,13 +99,11 @@ input, select, textarea { font-family: inherit; color: inherit; font-size: 16px;
     border: 10px solid #1a1a1e;
     padding-bottom: 0 !important;
   }
-  .app-body {
-    padding-bottom: 0 !important;
-    min-height: 860px;
-  }
+  body:not(.pc-mode).app-body { min-height: 860px; }
+
   /* fake notch */
-  .login-body::before,
-  .app-body::before {
+  body:not(.pc-mode).login-body::before,
+  body:not(.pc-mode).app-body::before {
     content: "";
     position: absolute;
     top: 8px;
@@ -116,26 +116,29 @@ input, select, textarea { font-family: inherit; color: inherit; font-size: 16px;
     z-index: 999;
   }
   /* re-anchor absolute/fixed inside phone frame */
-  .topbar,
-  .bottom-nav,
-  .sidebar,
-  .scrim,
-  .cart-scrim,
-  .cart-fab,
-  .pos-cart,
-  .modal,
-  .toast-host {
+  body:not(.pc-mode) .topbar,
+  body:not(.pc-mode) .bottom-nav,
+  body:not(.pc-mode) .sidebar,
+  body:not(.pc-mode) .scrim,
+  body:not(.pc-mode) .cart-scrim,
+  body:not(.pc-mode) .cart-fab,
+  body:not(.pc-mode) .pos-cart,
+  body:not(.pc-mode) .modal,
+  body:not(.pc-mode) .toast-host {
     position: absolute !important;
   }
-  .topbar { top: 0; left: 0; right: 0; }
-  .bottom-nav { bottom: 0; left: 0; right: 0; }
-  .sidebar, .scrim, .cart-scrim, .modal { inset: 0; }
-  .cart-fab {
+  body:not(.pc-mode) .topbar { top: 0; left: 0; right: 0; }
+  body:not(.pc-mode) .bottom-nav { bottom: 0; left: 0; right: 0; }
+  body:not(.pc-mode) .sidebar,
+  body:not(.pc-mode) .scrim,
+  body:not(.pc-mode) .cart-scrim,
+  body:not(.pc-mode) .modal { inset: 0; }
+  body:not(.pc-mode) .cart-fab {
     left: 12px; right: 12px;
     bottom: calc(var(--bottom-h) + 12px);
   }
-  .pos-cart { left: 0; right: 0; bottom: 0; }
-  .toast-host {
+  body:not(.pc-mode) .pos-cart { left: 0; right: 0; bottom: 0; }
+  body:not(.pc-mode) .toast-host {
     left: 0; right: 0;
     bottom: calc(var(--bottom-h) + 90px);
   }
@@ -1563,148 +1566,156 @@ input, select, textarea { font-family: inherit; color: inherit; font-size: 16px;
 
 /* ============================================================
    PC MODE — activado con body.pc-mode
-   Rompe el frame de teléfono y reparte el layout como app desktop
+   Layout de app desktop: sidebar + contenido + carrito lateral
    ============================================================ */
 @media (min-width: 900px) {
+  /* Body sin frame (redundante pero explícito) */
   body.pc-mode {
-    background: var(--bg) !important;
-    padding: 0 !important;
-    min-height: auto;
+    padding: 0;
+    background: var(--bg);
   }
-  body.pc-mode .app-body,
-  body.pc-mode .login-body {
-    max-width: none !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    min-height: 100dvh !important;
-    padding-bottom: 32px !important;
-  }
-  body.pc-mode .app-body::before,
-  body.pc-mode .login-body::before { display: none !important; }
-
-  /* Fixed en vez de absolute — vuelve a comportarse como en viewport real */
-  body.pc-mode .topbar,
-  body.pc-mode .bottom-nav,
-  body.pc-mode .sidebar,
-  body.pc-mode .scrim,
-  body.pc-mode .cart-scrim,
-  body.pc-mode .cart-fab,
-  body.pc-mode .pos-cart,
-  body.pc-mode .modal,
-  body.pc-mode .toast-host {
-    position: fixed !important;
+  /* App body */
+  body.pc-mode.app-body,
+  body.pc-mode .app-body {
+    padding-left: 240px;
+    padding-bottom: 24px;
+    min-height: 100dvh;
   }
 
-  /* Sidebar siempre visible en PC */
-  body.pc-mode .app-body { padding-left: 260px !important; }
+  /* Sidebar siempre visible */
   body.pc-mode .sidebar {
-    transform: translateX(0) !important;
-    box-shadow: none !important;
-    border-right: 1px solid var(--line) !important;
-    border-radius: 0 !important;
-    width: 260px !important;
-    max-width: 260px !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    max-width: 240px;
+    transform: translateX(0);
+    box-shadow: none;
+    border-right: 1px solid var(--line);
+    border-radius: 0;
+    z-index: 20;
   }
   body.pc-mode .sidebar-header {
-    background: var(--surface) !important;
-    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    padding-top: 20px;
   }
-  body.pc-mode .sidebar .close-btn,
-  body.pc-mode .menu-btn { display: none !important; }
-  body.pc-mode .scrim { display: none !important; }
+  body.pc-mode .sidebar .close-btn { display: none; }
+  body.pc-mode .menu-btn { display: none; }
+  body.pc-mode .scrim { display: none; }
 
-  /* Sin bottom nav ni FAB en PC */
-  body.pc-mode .bottom-nav { display: none !important; }
-  body.pc-mode .cart-fab { display: none !important; }
-  body.pc-mode .cart-scrim { display: none !important; }
+  /* Sin bottom nav ni FAB */
+  body.pc-mode .bottom-nav { display: none; }
+  body.pc-mode .cart-fab { display: none; }
+  body.pc-mode .cart-scrim { display: none; }
 
-  /* Topbar corrido */
+  /* Topbar corrido a la derecha del sidebar */
   body.pc-mode .topbar {
-    left: 260px !important;
-    padding-left: 24px !important;
+    position: sticky;
+    top: 0;
+    padding: 12px 24px;
+    padding-top: 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
-  /* POS: producto + carrito lado a lado */
+  /* Main content */
+  body.pc-mode .app-main {
+    max-width: 1400px;
+    padding: 24px 28px;
+    margin: 0 auto;
+  }
+
+  /* POS grid */
   body.pc-mode .pos-grid {
-    display: grid !important;
+    display: grid;
     grid-template-columns: 1fr 380px;
-    gap: 20px;
+    gap: 24px;
     align-items: start;
   }
   body.pc-mode .pos-cart {
-    position: sticky !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    top: calc(var(--topbar-h) + 20px);
-    max-height: calc(100dvh - var(--topbar-h) - 40px);
-    transform: none !important;
+    position: sticky;
+    top: calc(var(--topbar-h) + 24px);
+    left: auto;
+    right: auto;
+    bottom: auto;
+    max-height: calc(100dvh - var(--topbar-h) - 48px);
+    transform: none;
     border-radius: var(--radius);
     border: 1px solid var(--line);
     box-shadow: var(--shadow-1);
-    padding: 16px;
-    z-index: 1;
+    padding: 18px;
+    background: var(--surface);
   }
-  body.pc-mode .pos-cart::before { display: none !important; }
-  body.pc-mode .sheet-close { display: none !important; }
-  body.pc-mode .cart-items { max-height: none !important; }
+  body.pc-mode .pos-cart::before { display: none; }
+  body.pc-mode .sheet-close { display: none; }
+  body.pc-mode .cart-items { max-height: 360px; }
   body.pc-mode .cart-header h3 { font-size: 16px; }
 
+  /* Filter row estática */
   body.pc-mode .filter-row {
-    position: static !important;
-    margin: 0 0 14px !important;
-    padding: 0 !important;
-    border: 0 !important;
-    background: transparent !important;
+    position: static;
+    margin: 0 0 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    gap: 12px;
+  }
+  body.pc-mode .search-box {
+    min-width: 260px;
+    flex: 1;
   }
   body.pc-mode .chips {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    flex: 2;
     flex-wrap: wrap;
     overflow: visible;
   }
-  body.pc-mode .search-box { min-width: 240px; flex: 1; }
 
+  /* Product grid más denso */
   body.pc-mode .product-grid {
     grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
     gap: 12px;
   }
 
+  /* Stats en 4 columnas */
   body.pc-mode .stat-cards {
     grid-template-columns: repeat(4, 1fr);
   }
   body.pc-mode .two-col { grid-template-columns: 1fr 1fr; }
 
+  /* Modales centrados */
   body.pc-mode .modal {
-    place-items: center !important;
-    padding: 20px !important;
+    place-items: center;
+    padding: 20px;
   }
   body.pc-mode .modal-card {
-    border-radius: var(--radius-lg) !important;
-    max-width: 440px !important;
-    padding: 24px !important;
+    border-radius: var(--radius-lg);
+    max-width: 460px;
+    padding: 24px;
+    animation: fadeIn .15s ease;
   }
-  body.pc-mode .modal-card::before { display: none !important; }
+  body.pc-mode .modal-card::before { display: none; }
+
+  /* Toasts */
   body.pc-mode .toast-host {
-    bottom: 24px !important;
-    left: 260px !important;
+    bottom: 24px;
+    left: 240px;
+    right: 0;
   }
 
-  body.pc-mode .app-main {
-    max-width: 1400px !important;
-    padding: 24px !important;
-  }
-  body.pc-mode .user-chip { display: inline-block !important; }
+  /* UI chrome */
+  body.pc-mode .user-chip { display: inline-block; }
   body.pc-mode .view-head h2 { font-size: 24px; }
 
-  /* Login en PC: quita frame, centra tarjeta */
-  body.pc-mode.login-body,
-  body.pc-mode .login-body { padding: 32px 0 !important; }
+  /* Login PC */
+  body.pc-mode.login-body { padding: 32px 0; }
   body.pc-mode .login-shell {
-    max-width: 420px !important;
-    margin: 0 auto !important;
+    max-width: 420px;
+    margin: 0 auto;
   }
 }
